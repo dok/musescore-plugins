@@ -32,6 +32,12 @@ MuseScore {
       onRun: {
             if (!curScore)
                   Qt.quit();
+
+            if (!curScore.selection.elements.length) {
+                  curScore.startCmd();
+                  curScore.selection.selectRange(0, curScore.lastSegment.tick + 1, 0, curScore.nstaves);
+                  curScore.endCmd();
+            }
             
             function getSelectedMeasures(cursor) {
                   cursor.rewind(Cursor.SELECTION_END);
@@ -87,10 +93,12 @@ MuseScore {
                               onFinish(JSON.parse(xhr.response));
                         }
                   }
+
                   var packet = {
                         xml: xml,
                         selection: selected,
                   }
+
                   xhr.open("POST", "https://music.candidcode.io/chords");
                   xhr.setRequestHeader('Content-Type', 'application/json');
                   xhr.send(JSON.stringify(packet));
@@ -105,7 +113,7 @@ MuseScore {
                   curScore.startCmd();
                   var sel = curScore.selection;
                   var startTick = sel.startSegment.tick;
-                  var endTick = sel.endSegment.tick;
+                  var endTick = (sel.endSegment && sel.endSegment.tick) || (curScore.lastSegment.tick);
                   var startStaff = sel.startStaff;
                   var endStaff = sel.endStaff;
                   clearElementType(Element.HARMONY)
