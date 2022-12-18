@@ -91,7 +91,7 @@ MuseScore {
                         xml: xml,
                         selection: selected,
                   }
-                  xhr.open("POST", "https://music-6u40kns91-dok3.vercel.app/chords");
+                  xhr.open("POST", "https://music.candidcode.io/chords");
                   xhr.setRequestHeader('Content-Type', 'application/json');
                   xhr.send(JSON.stringify(packet));
             }
